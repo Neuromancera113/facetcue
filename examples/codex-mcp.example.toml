@@ -1,0 +1,10 @@
+# Use the Python executable from the environment where the release wheel is installed.
+[mcp_servers.facetcue]
+command = '/absolute/path/to/venv/bin/python'
+args = ['-m', 'agent_mcp.server']
+
+# Windows command example: 'C:/path/to/venv/Scripts/python.exe'
+# Optional when several Blender instances are open:
+# [mcp_servers.facetcue.env]
+# ASM_INSTANCE = '32-character instance ID shown in the Blender panel'
+# ASM_READ_TIMEOUT = '15'
