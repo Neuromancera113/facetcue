@@ -1,0 +1,14 @@
+schema_version = "1.0.0"
+id = "blender_agent_marks"
+version = "0.5.2"
+name = "FacetCue for Blender"
+tagline = "Surface notes for agent edits and persistent review"
+maintainer = "FacetCue contributors"
+type = "add-on"
+blender_version_min = "4.2.0"
+license = ["SPDX:GPL-3.0-or-later"]
+tags = ["3D View"]
+
+[permissions]
+network = "Serve authenticated annotation requests on localhost"
+files = "Store temporary per-user connection discovery information"
