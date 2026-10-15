@@ -6,8 +6,6 @@ extend-exclude = ["artifacts", "dist"]
 select = ["E4", "E7", "E9", "F", "I"]
 
 [lint.per-file-ignores]
-"tests/blender_*.py" = ["E402"]
-"tests/mcp_*.py" = ["E402"]
 "scripts/export_mcp_catalog.py" = ["E402"]
 "scripts/package_addon.py" = ["E402"]
 "scripts/check_release.py" = ["E402"]

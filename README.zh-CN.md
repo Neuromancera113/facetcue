@@ -8,7 +8,7 @@
 
 当前版本 **0.5.2**，许可证 [GPL-3.0-or-later](LICENSE)（GPL 第 3 版或更高版本）。Python 包名与命令行入口统一为 `facetcue`。
 
-[完整使用与实现说明](docs/guide.zh-CN.md) · [介绍视频脚本](docs/video-script.zh-CN.md)
+[完整使用与实现说明](docs/guide.zh-CN.md)
 
 ## 核心能力
 
@@ -91,4 +91,4 @@ python scripts/check_release.py --blender /path/to/blender
 
 产物在 `dist/`，包括 Blender 扩展 ZIP、MCP wheel、源码包及 `SHA256SUMS` 校验文件。扩展 ZIP 同时附带其链接的文档与配置示例；构建与检查均不会执行发布。见 [版本说明](docs/release-notes.md)、[开发入口](CONTRIBUTING.md)及 [API](docs/api.zh-CN.md)。
 
-本地回归测试集不随此仓库提供。`scripts/check.py` 需要单独的 `tests/` 目录；上述命令及 CI 检查代码风格、MCP 接口定义和发布包。
+CI 检查代码风格、MCP 接口定义和发布包。

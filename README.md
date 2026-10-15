@@ -24,7 +24,7 @@ The workflow is **mark and describe → agent reads the batch → modeling tools
 
 Version: **0.5.2**. License: [GPL-3.0-or-later](LICENSE). The Python distribution and command-line entry point are named `facetcue`.
 
-Chinese documentation: [User and implementation guide](docs/guide.zh-CN.md) · [Introduction video script](docs/video-script.zh-CN.md).
+Chinese documentation: [User and implementation guide](docs/guide.zh-CN.md).
 
 ## Install
 
@@ -90,6 +90,6 @@ python -m build
 python scripts/check_release.py --blender /path/to/blender
 ```
 
-The local regression test suite is not included in this repository. `scripts/check.py` requires that separate `tests/` directory; the commands above and CI validate style, MCP contracts and release packages.
+CI validates code style, MCP contracts and release packages.
 
 Build outputs are written to `dist/`. The extension ZIP, Python wheel and source archive are separate artifacts, accompanied by `SHA256SUMS`. The extension includes its linked documentation and configuration example. Packaging and checks never publish anything. See [release notes](docs/release-notes.md), [CONTRIBUTING](CONTRIBUTING.md) for module boundaries and [API](docs/api.zh-CN.md) for data semantics.
