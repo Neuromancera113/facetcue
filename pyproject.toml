@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "facetcue"
+version = "0.5.2"
+description = "Blender surface annotations for agent edits and persistent review through MCP"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
+authors = [{name = "FacetCue contributors"}]
+dependencies = ["mcp==1.29.1"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Multimedia :: Graphics :: 3D Modeling",
+]
+
+[project.scripts]
+facetcue = "agent_mcp.server:main"
+
+[project.optional-dependencies]
+dev = ["ruff==0.14.0", "build>=1.2,<2"]
+
+[tool.setuptools.packages.find]
+include = ["agent_mcp*", "blender_agent_marks*"]
+
+[tool.setuptools.package-data]
+blender_agent_marks = ["blender_manifest.toml"]
