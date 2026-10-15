@@ -1,0 +1,27 @@
+name: FacetCue checks
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  python:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: ['3.10', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install -r requirements-dev.txt
+      - run: python -m ruff check .
+      - run: python -m ruff format --check .
+      - run: python scripts/export_mcp_catalog.py --check
+      - run: python scripts/package_addon.py
+      - run: python -m build
+      - run: python scripts/check_release.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: facetcue-${{ matrix.os }}-${{ matrix.python }}
+          path: dist/
