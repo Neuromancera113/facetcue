@@ -1,0 +1,109 @@
+{
+  "tools": [
+    {
+      "name": "get_surface_annotations",
+      "description": "Read user surface marks/TODOs from the current Blender file in one call.\n\n        Call with no arguments first. Returns all statuses from all scenes,\n        including hidden objects and hidden overlays: full notes, stable IDs,\n        current 3D positions, anchor validity, and automatically selected viewport\n        visibility. No selection, saving, Python code or screenshot is required.\n        Includes unsaved edits. No viewport still returns notes and 3D positions.\n        Pagination: follow next_offset if has_more. Each page is a fresh read.\n        scene_name optionally narrows the file; limit is 1..200. Set\n        include_visibility=false for a lighter read. Blender must be running\n        with FacetCue for Blender enabled.\n        ",
+      "inputSchema": {
+        "properties": {
+          "scene_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Scene Name"
+          },
+          "offset": {
+            "default": 0,
+            "title": "Offset",
+            "type": "integer"
+          },
+          "limit": {
+            "default": 50,
+            "title": "Limit",
+            "type": "integer"
+          },
+          "include_visibility": {
+            "default": true,
+            "title": "Include Visibility",
+            "type": "boolean"
+          }
+        },
+        "title": "get_surface_annotationsArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Read Blender surface annotations",
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    },
+    {
+      "name": "submit_annotation_changes",
+      "description": "After model edits succeed, mark 1..200 affected annotations as MODIFIED.\n\n        Pass the scene_name, marker_id and expected_revision from the read before\n        editing, plus a brief summary of actual completed work. The whole batch\n        is validated before status writes. Same revision/summary retries are safe.\n        This adds a blue review badge; it does not change geometry, approve work,\n        overwrite user notes, or infer which objects were edited. A revision\n        conflict requires rereading and reconciling the updated user request.\n        ",
+      "inputSchema": {
+        "$defs": {
+          "AnnotationChange": {
+            "additionalProperties": false,
+            "properties": {
+              "scene_name": {
+                "title": "Scene Name",
+                "type": "string"
+              },
+              "marker_id": {
+                "title": "Marker Id",
+                "type": "string"
+              },
+              "expected_revision": {
+                "minimum": 1,
+                "title": "Expected Revision",
+                "type": "integer"
+              },
+              "summary": {
+                "maxLength": 8000,
+                "minLength": 1,
+                "title": "Summary",
+                "type": "string"
+              }
+            },
+            "required": [
+              "scene_name",
+              "marker_id",
+              "expected_revision",
+              "summary"
+            ],
+            "title": "AnnotationChange",
+            "type": "object"
+          }
+        },
+        "properties": {
+          "changes": {
+            "items": {
+              "$ref": "#/$defs/AnnotationChange"
+            },
+            "title": "Changes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "changes"
+        ],
+        "title": "submit_annotation_changesArguments",
+        "type": "object"
+      },
+      "annotations": {
+        "title": "Submit completed annotation changes for user review",
+        "readOnlyHint": false,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      }
+    }
+  ]
+}
