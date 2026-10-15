@@ -20,7 +20,7 @@ FacetCue for Blender 将每个修改问题变成物体表面的独立标记：�
 | MCP 配套服务 | 独立 Python 3.10+ 环境，以及支持 stdio MCP 的 agent 客户端 |
 | `facetcue-0.5.2.zip` | 安装到 Blender 的扩展包 |
 | `facetcue-0.5.2-py3-none-any.whl` | 安装到独立 Python 环境的 MCP 配套包 |
-| `facetcue-0.5.2.tar.gz` | 包含源码、测试和文档的开发用源码包 |
+| `facetcue-0.5.2.tar.gz` | 包含源码和文档的开发用源码包 |
 
 仅在 Blender 内使用标记时，安装 ZIP 即可。需要 agent 读取和提交时，再配置 MCP。MCP 配套包依赖 `mcp==1.29.1`，由 pip 安装；wheel 没有捆绑第三方依赖，首次安装需要能够访问软件源。
 
