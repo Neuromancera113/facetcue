@@ -22,7 +22,7 @@ Compact draggable dialogs support Enter to save and remember their position. Sea
 | --- | --- |
 | `facetcue-0.5.2.zip` | Install from Disk in Blender Preferences, then enable FacetCue for Blender |
 | `facetcue-0.5.2-py3-none-any.whl` | Install with pip in a separate Python environment for the MCP companion |
-| `facetcue-0.5.2.tar.gz` | Source, tests, documentation and GitHub workflow for development |
+| `facetcue-0.5.2.tar.gz` | Source, documentation and GitHub workflow for development |
 | `SHA256SUMS` | SHA-256 hashes of the three release archives |
 
 Requires Blender 4.2+ and, for MCP, separate Python 3.10+. GitHub's automatic **Source code** archives cannot be installed directly as Blender extensions. The MCP wheel needs its Python dependencies; the Blender add-on itself uses Blender APIs and the standard library only.
