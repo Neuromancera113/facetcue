@@ -15,7 +15,7 @@ def documentation_sources():
         for name in ("LICENSE", "README.md", "README.zh-CN.md", "CONTRIBUTING.md", "SECURITY.md")
     }
     for directory, suffixes in (
-        ("docs", {".md", ".srt"}),
+        ("docs", {".md"}),
         ("examples", {".toml"}),
         ("contracts", {".json"}),
     ):

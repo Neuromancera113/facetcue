@@ -111,8 +111,7 @@ def project_sources():
         sources[name] = ROOT / name
     for directory, suffixes in (
         ("scripts", {".py"}),
-        ("tests", {".py"}),
-        ("docs", {".md", ".srt"}),
+        ("docs", {".md"}),
         ("contracts", {".json"}),
         ("examples", {".toml"}),
         (".github", {".yml", ".md"}),
