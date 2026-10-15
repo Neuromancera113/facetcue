@@ -4,7 +4,6 @@ include .gitignore .gitattributes
 recursive-include blender_agent_marks *.py *.toml
 recursive-include agent_mcp *.py
 recursive-include scripts *.py
-recursive-include tests *.py
 recursive-include docs *.md *.srt
 recursive-include contracts *.json
 recursive-include examples *.toml

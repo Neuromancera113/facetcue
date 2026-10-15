@@ -84,11 +84,12 @@ The add-on opens an authenticated **127.0.0.1-only** endpoint and writes a tempo
 python -m pip install -e ".[dev]"
 python -m ruff check .
 python -m ruff format --check .
-python scripts/check.py --blender /path/to/blender --gui --mcp
 python scripts/export_mcp_catalog.py --check
 python scripts/package_addon.py
 python -m build
 python scripts/check_release.py --blender /path/to/blender
 ```
+
+The local regression test suite is not included in this repository. `scripts/check.py` requires that separate `tests/` directory; the commands above and CI validate style, MCP contracts and release packages.
 
 Build outputs are written to `dist/`. The extension ZIP, Python wheel and source archive are separate artifacts, accompanied by `SHA256SUMS`. The extension includes its linked documentation and configuration example. Packaging and checks never publish anything. See [release notes](docs/release-notes.md), [CONTRIBUTING](CONTRIBUTING.md) for module boundaries and [API](docs/api.zh-CN.md) for data semantics.

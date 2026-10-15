@@ -83,7 +83,6 @@ Agent 读取不受显示开关、对象选择、隐藏对象、搜索和筛选�
 python -m pip install -e ".[dev]"
 python -m ruff check .
 python -m ruff format --check .
-python scripts/check.py --blender /path/to/blender --gui --mcp
 python scripts/export_mcp_catalog.py --check
 python scripts/package_addon.py
 python -m build
@@ -91,3 +90,5 @@ python scripts/check_release.py --blender /path/to/blender
 ```
 
 产物在 `dist/`，包括 Blender 扩展 ZIP、MCP wheel、源码包及 `SHA256SUMS` 校验文件。扩展 ZIP 同时附带其链接的文档与配置示例；构建与检查均不会执行发布。见 [版本说明](docs/release-notes.md)、[开发入口](CONTRIBUTING.md)及 [API](docs/api.zh-CN.md)。
+
+本地回归测试集不随此仓库提供。`scripts/check.py` 需要单独的 `tests/` 目录；上述命令及 CI 检查代码风格、MCP 接口定义和发布包。

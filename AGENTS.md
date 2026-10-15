@@ -7,6 +7,6 @@ Read CONTRIBUTING.md before editing. Keep the implementation small and fork-frie
 - Prefer Blender APIs and the standard library. No OS-specific window APIs or dependencies on another Blender MCP installation.
 - Reads work without saving, selection or visible overlays. Errors never become successful empty results.
 - Keep only comments explaining non-obvious invariants. Never log notes or connection tokens.
-- Run scripts/check.py in isolated processes; never use a user's scene as a fixture.
+- Run style, MCP catalog and release checks. scripts/check.py additionally requires the separate local tests/ suite; never use a user's scene as a fixture.
 - Keep generated artifacts and personal configuration out of Git and packages.
 - Packaging is separate from publishing. Only publish with explicit user authorization.
