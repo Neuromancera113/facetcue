@@ -1,60 +1,86 @@
 # FacetCue for Blender
 
-[简体中文](README.zh-CN.md)
+[简体中文](README.zh-CN.md) · [Downloads](https://github.com/Neuromancera113/facetcue/releases) · [User guide](docs/guide.zh-CN.md) · [Release notes](docs/release-notes.md)
 
-**Surface notes for agent edits and persistent review.**
+**Put a note on the surface. Let your agent work from it. Review the result in Blender.**
 
-Place annotatable markers on Blender objects and describe each requested change in natural language. When you ask an agent to process the marks, it can automatically read them through MCP, use its connected Blender modeling tools to make the changes, and submit the results for your review.
+FacetCue turns changes you want into independent, annotated markers on a Blender model. Each marker tells an agent **what to change and where**: a natural-language request, a surface anchor, current 3D coordinates and viewport visibility. Through MCP, the agent can read the requests in a batch, apply edits using its connected Blender modeling tools, and submit each result for your review.
 
-## Core capabilities
+**0.5.2 · Beta · Blender 4.2+ · Python 3.10+ for MCP · [GPL-3.0-or-later](LICENSE)**
 
-- **One marker per issue:** each marker has its own number, color and natural-language request, such as “move this panel up by 0.12 meters.”
-- **Positions bound to 3D surfaces:** markers anchor to triangles on supported meshes and expose their current 3D position, normal and viewport visibility, beyond a screenshot's 2D coordinates.
-- **Batch issue processing:** agents read multiple markers in one call, address them by ID and submit a separate completion summary for each. Larger sets use pagination.
-- **Per-marker state:** track open, in-progress, modified/awaiting-review, resolved or rejected work; filter, navigate and review each issue independently.
-- **Persistent review:** saving the `.blend` file preserves target associations, notes, states, latest change summaries and review records so work can continue after reopening it.
+## What you can do
 
-The workflow is **mark and describe → agent reads the batch → modeling tools apply edits → submit for review → approve or request changes**. The agent performs the automatic read-and-edit workflow; this add-on supplies annotations, MCP access and review records. Actual model changes require connected Blender modeling tools.
+| Capability | How it works |
+| --- | --- |
+| One marker, one issue | Give each requested change its own note, number and distinct color. |
+| Surface-bound context | Anchor to a supported mesh triangle; expose current position, normal and anchor validity. |
+| Immediate agent access | Read confirmed notes without selecting objects, saving the file, taking screenshots or showing overlays. |
+| Batch processing | Read multiple issues, follow pagination for larger sets, and submit completion summaries by marker ID. |
+| Review in Blender | Track open, in-progress, awaiting-review, resolved, changes-requested and archived states; locate and review each issue. |
+| Continue later | Save the `.blend` to retain notes, object associations, states, latest change summaries and review history. |
 
-## Requirements
+Markers are viewport overlays and scene metadata. They add no renderable or exportable geometry. You control their display; agents can still read confirmed notes while markers or objects are hidden.
 
-- Blender 4.2 or newer. The add-on uses Blender APIs and Python's standard library only.
-- For MCP: a separate Python 3.10+ environment. No Python packages need to be installed into Blender.
-- Designed for Windows, macOS and Linux. This release is validated on Windows with Blender 5.2.1 LTS; macOS and Linux runtime behavior still needs testing.
+## From a note to a reviewed change
 
-Version: **0.5.2**. License: [GPL-3.0-or-later](LICENSE). The Python distribution and command-line entry point are named `facetcue`.
+1. **Mark:** in Object Mode with Solid shading, place a marker on a supported mesh surface.
+2. **Describe:** enter a request, such as “move this panel up by 0.12 Blender units; preserve its shape and size.” Press **Enter** to save.
+3. **Delegate:** ask your agent to read the FacetCue marks and process the requested changes.
+4. **Inspect:** completed submissions gain a **blue dot with a narrow white border**. The original marker color stays unchanged.
+5. **Review:** jump to the point for a close view, then approve or reject and revise the request. Save your `.blend` to keep the review record.
 
-Chinese documentation: [User and implementation guide](docs/guide.zh-CN.md).
+FacetCue supplies the annotation and review connection. **Model edits require an agent with separate Blender modeling tools.** Installing FacetCue alone does not start an autonomous editing session or provide arbitrary Python execution.
 
 ## Install
 
-1. Use `facetcue-0.5.2.zip` from the release assets. GitHub's automatic **Source code** downloads are for development and cannot be installed as Blender extensions directly.
-2. In Blender, open **Preferences → Add-ons → Install from Disk**, select the ZIP and enable **FacetCue for Blender**. Enable only one installation of the add-on.
-3. Open **3D View → N → FacetCue for Blender**. The local agent connection starts with the add-on.
+### 1. Blender extension
 
-Install the MCP companion from the release wheel, using your regular Python:
+Download **`facetcue-0.5.2.zip`** from [Releases](https://github.com/Neuromancera113/facetcue/releases). In Blender, use **Preferences → Add-ons → Install from Disk**, select the ZIP without extracting it, and enable **FacetCue for Blender**. Open **3D View → N → FacetCue for Blender**. Enable only one installation of the add-on.
+
+The ZIP is enough for local annotation and review. GitHub's automatic **Source code** archives are for development and cannot be installed directly as Blender extensions.
+
+### 2. MCP companion
+
+For agent access, download **`facetcue-0.5.2-py3-none-any.whl`** from the same release. Run these commands in its download directory with a separate Python 3.10+ installation.
+
+Windows PowerShell:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install .\facetcue-0.5.2-py3-none-any.whl
+```
+
+macOS / Linux:
 
 ```sh
-python -m venv .venv
-# Windows: .venv/Scripts/python; macOS/Linux: .venv/bin/python
-.venv/Scripts/python -m pip install ./facetcue-0.5.2-py3-none-any.whl
+python3 -m venv .venv
+./.venv/bin/python -m pip install ./facetcue-0.5.2-py3-none-any.whl
 ```
 
-Configure your agent's stdio MCP client with the absolute path to that Python executable and these arguments:
+The wheel's dependencies are installed by pip; they are not bundled. The Blender add-on uses Blender APIs and the standard library only. Do not install MCP dependencies into Blender's Python.
 
-```text
--m agent_mcp.server
-```
+### 3. Agent connection
 
-A [TOML example](examples/codex-mcp.example.toml) is included. A single running Blender instance is discovered automatically; no third-party Blender MCP bridge, fixed port or personal installation path is required. With several Blender instances, set `ASM_INSTANCE` to the desired ID shown in the FacetCue for Blender panel. This companion handles annotations; use your modeling tools alongside it.
+Add a **stdio MCP server** to your agent client. Set `command` to the absolute path of the Python executable above and `args` to `["-m", "agent_mcp.server"]`. See the [TOML configuration example](examples/codex-mcp.example.toml).
 
-The same ZIP and wheel work across supported platforms; see [macOS installation](docs/macos.md) for platform-specific commands.
+Keep Blender running with the add-on enabled, then reload your client's MCP configuration. One Blender instance is discovered automatically. With several instances, set `ASM_INSTANCE` to the session ID shown in the target Blender panel; update it after restarting that connection. No fixed port or third-party Blender MCP bridge is needed for annotation access.
 
-## Use
+The client should discover two tools:
 
-In **Object Mode / Solid shading**, place a point on a mesh and enter its note in a compact, fixed-width Blender dialog. **Enter** saves and closes; **Esc** cancels. Drag the dialog title to move it. It starts near the lower center of the viewport and remembers the last position for all subsequent note dialogs, including after restarting Blender. Position is stored in Blender’s user configuration, separately from the scene. Creating, editing and rejecting marks all use this dialog by default and preserve the viewport. For longer notes, save the point first, then choose **Multiline edit** in the sidebar to open a separate Text Editor. Existing multiline notes open as a compact preview with an explicit **Expand multiline editor** button, preserving every line break. In that expanded editor, **Shift+Enter** inserts a line break. Its size and position are managed by Blender; closing its window keeps the unconfirmed draft.
+| Tool | Purpose |
+| --- | --- |
+| `get_surface_annotations()` | Read notes, stable IDs, revisions, positions and visibility. Start without arguments; follow `next_offset` while `has_more` is true. |
+| `submit_annotation_changes()` | After successful edits, submit marker IDs, the revisions read before editing and a summary of actual work. This marks the results for user review. |
 
-Click a marker to select it, or double-click its number to edit. The panel supports search, status filters and close-up navigation around the annotation point. Notes live in the `.blend` file as metadata and create no renderable or exportable geometry. Committed edits are readable immediately, even before saving the file; drafts are not returned to agents.
+Example request to your agent:
+
+> Read my FacetCue surface annotations. Process the pending requests with the connected Blender modeling tools, preserve the stated constraints, and submit a completion summary for each successful change. Leave approval to me.
+
+Display toggles, object selection and sidebar filters do not restrict agent reads. Unconfirmed drafts are excluded. Connection failures return errors, not empty results. See the [API guide](docs/api.zh-CN.md) for revision handling and data semantics.
+
+## Editing and navigation
+
+Notes open in a compact, draggable Blender dialog near the lower center of the viewport. **Enter saves; Esc cancels.** Drag its title to move it; later note dialogs reuse that position, including after restarting Blender. Click a marker to select it or double-click its number to edit. Longer notes have an explicit **Multiline edit** entry in the sidebar; existing line breaks are preserved. Search, status filters and close-up navigation help you work through a batch.
 
 | Shortcut in Object Mode / 3D View | Action |
 | --- | --- |
@@ -66,19 +92,20 @@ Click a marker to select it, or double-click its number to edit. The panel suppo
 | Ctrl+Alt+Shift+Z | Withdraw the most recent review decision |
 | Ctrl+Alt+Shift+X | Confirm deletion of the selected marker |
 
-**Ctrl+Z / Ctrl+Shift+Z** undo/redo annotation UI edits and deletion. The dedicated review-withdraw shortcut restores the previous note and review state without undoing geometry. Registration skips detected conflicting shortcuts and reports them in the panel; keys can be changed in Blender's Keymap preferences.
+Annotation UI edits and deletion support Blender **Ctrl+Z / Ctrl+Shift+Z**. Review withdrawal restores the previous note and review state without undoing geometry. Detected keymap conflicts are skipped and reported in the panel; change bindings in Blender's Keymap preferences as needed.
 
-Marker display requires both the add-on's display switch and Blender's **Show Overlays** switch. Normal mode hides occluded markers. **Alt+Z (X-Ray)** reveals them at **40% opacity**, with note cards collapsed by default. Marker colors remain distinct; **a blue dot with a thin white border** indicates work awaiting review.
+Both FacetCue display and Blender **Show Overlays** must be enabled to see markers. Normal mode hides occluded points. **Alt+Z (X-Ray)** reveals them at **60% transparency / 40% opacity**, with note cards collapsed by default. Review badges follow the same visibility and transparency as their markers.
 
-Agents call `get_surface_annotations()` before modeling, follow `next_offset` while `has_more` is true, then call `submit_annotation_changes()` with IDs, revisions and summaries of completed edits. Only the user approves or rejects work. Display toggles, object selection, hidden objects and filters never prevent agent reads. Connection failures return errors, not empty results.
+## Compatibility and limits
 
-## Limits and privacy
+- Requires **Blender 4.2+**. Windows with **Blender 5.2.1 LTS** has been validated. The same packages target macOS and Linux, but Blender runtime behavior on those platforms still needs testing. Cross-platform Python CI does not establish Blender runtime compatibility.
+- Anchors support **base mesh objects without enabled viewport modifiers or shape keys**. Unsupported or changed topology preserves the note but returns an explicitly invalid position; automatic reattachment is not provided.
+- Scene duplication does not duplicate annotations. As marker counts grow, use numbers alongside colors to distinguish issues.
+- Confirmed edits are immediately available to agents. Save the `.blend` to preserve them across sessions; sharing that file also shares its stored annotation metadata.
 
-Anchors currently require base mesh objects without enabled modifiers or shape keys. Unsupported or changed topology returns an explicit invalid position while preserving the note; automatic reattachment is not provided. Scene duplication does not duplicate annotations. Exact colors become harder to distinguish as the number of markers grows.
+## Privacy and development
 
-The add-on opens an authenticated **127.0.0.1-only** endpoint and writes a temporary per-user discovery file. It accepts only annotation reads and completion submissions, never arbitrary Python or geometry commands. No cloud service or telemetry is used. The agent receives the requested annotations; review its own data policy. See [security details](SECURITY.md).
-
-## Develop and build
+The add-on serves authenticated requests on **127.0.0.1 only**, using a temporary per-user discovery file. It accepts annotation reads and completion submissions, not geometry commands or arbitrary Python. FacetCue has no cloud service or telemetry; annotations read by your agent are subject to that agent's data policy. See [SECURITY](SECURITY.md).
 
 ```sh
 python -m pip install -e ".[dev]"
@@ -90,6 +117,4 @@ python -m build
 python scripts/check_release.py --blender /path/to/blender
 ```
 
-CI validates code style, MCP contracts and release packages.
-
-Build outputs are written to `dist/`. The extension ZIP, Python wheel and source archive are separate artifacts, accompanied by `SHA256SUMS`. The extension includes its linked documentation and configuration example. Packaging and checks never publish anything. See [release notes](docs/release-notes.md), [CONTRIBUTING](CONTRIBUTING.md) for module boundaries and [API](docs/api.zh-CN.md) for data semantics.
+Builds produce the extension ZIP, MCP wheel, source archive and `SHA256SUMS` in `dist/`. CI checks style, MCP contracts and package contents; the optional Blender check validates installation in an isolated process. Packaging never publishes. See [CONTRIBUTING](CONTRIBUTING.md) for module boundaries and development guidance.

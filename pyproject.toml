@@ -22,6 +22,12 @@ classifiers = [
 [project.scripts]
 facetcue = "agent_mcp.server:main"
 
+[project.urls]
+Homepage = "https://github.com/Neuromancera113/facetcue"
+Documentation = "https://github.com/Neuromancera113/facetcue/blob/main/README.md"
+Issues = "https://github.com/Neuromancera113/facetcue/issues"
+Source = "https://github.com/Neuromancera113/facetcue"
+
 [project.optional-dependencies]
 dev = ["ruff==0.14.0", "build>=1.2,<2"]
 
